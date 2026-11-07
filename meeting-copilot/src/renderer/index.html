@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src app: 'wasm-unsafe-eval'; worker-src app: blob:; style-src app: 'unsafe-inline'; connect-src app: https: blob: data:; img-src app: data:; media-src blob:" />
+  <title>Notes</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header id="bar">
+    <div class="drag">
+      <span class="dot" id="dotListen" title="Listening"></span>
+      <strong>Notes</strong>
+      <span class="pill" id="pillModel">speech: idle</span>
+      <span class="pill" id="pillGemini">gemini: ?</span>
+      <span class="meter" title="System audio level"><i id="lvlSys"></i></span>
+      <span class="meter mic" title="Microphone level"><i id="lvlMic"></i></span>
+    </div>
+    <div class="btns">
+      <button id="btnListen" class="primary">Start</button>
+      <label class="chk"><input type="checkbox" id="chkMic" checked /> mic</label>
+      <label class="chk"><input type="checkbox" id="chkAuto" checked /> auto-ask</label>
+      <button id="btnNew" title="Start a fresh Gemini conversation">New chat</button>
+      <button id="btnSettings" title="Settings">⚙</button>
+      <button id="btnHide" title="Hide (Ctrl/Cmd+Shift+H to show)">–</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="col">
+      <h2>Heard</h2>
+      <div id="transcript" class="scroll"><p class="hint">Press <b>Start</b>. Speech from your speakers/headphones (“Them”) and your microphone (“You”) is transcribed here.</p></div>
+    </section>
+    <section class="col">
+      <h2>Gemini</h2>
+      <div id="answers" class="scroll"></div>
+    </section>
+  </main>
+
+  <footer>
+    <input id="manual" placeholder="Type a question for Gemini and press Enter…" autocomplete="off" />
+    <span class="keys">Ctrl/Cmd+Shift: <b>H</b> hide · <b>X</b> click-through · <b>Enter</b> ask last · <b>L</b> listen · <b>←↑↓→</b> move</span>
+  </footer>
+
+  <div id="modal" hidden>
+    <div class="card">
+      <h3>Settings</h3>
+      <label>Speech model
+        <select id="setModel">
+          <option value="Xenova/whisper-tiny.en">tiny.en (fastest)</option>
+          <option value="Xenova/whisper-base.en">base.en (balanced)</option>
+          <option value="Xenova/whisper-small.en">small.en (most accurate, slower)</option>
+        </select>
+      </label>
+      <label>Pause that ends a phrase (ms)
+        <input type="number" id="setSilence" min="300" max="3000" step="100" />
+      </label>
+      <label class="row"><input type="checkbox" id="setIgnoreMic" /> Ignore mic while system audio is speaking (avoids echo duplicates)</label>
+      <label class="row"><input type="checkbox" id="setHide" /> Hide this window from screen sharing / recording</label>
+      <label>Window opacity <input type="range" id="setOpacity" min="0.3" max="1" step="0.05" /></label>
+      <label>Gemini prompt prefix <textarea id="setPrompt" rows="4"></textarea></label>
+      <label>Manual Google cookies (optional – overrides Firefox)
+        <textarea id="setCookies" rows="2" placeholder="__Secure-1PSID=...; __Secure-1PSIDTS=...; ..."></textarea>
+      </label>
+      <div class="row"><button id="btnTest">Test Gemini login</button><span id="testOut" class="hint"></span></div>
+      <div class="row end"><button id="btnQuit">Quit app</button><button id="btnClose" class="primary">Done</button></div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

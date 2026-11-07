@@ -1,0 +1,42 @@
+{
+  "name": "meeting-copilot",
+  "productName": "Meeting Copilot",
+  "version": "0.1.0",
+  "description": "Live transcription of system + microphone audio, answered by Gemini (Firefox cookie session). Hidden from screen sharing.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/*.test.js",
+    "postinstall": "electron-builder install-app-deps",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac"
+  },
+  "license": "GPL-3.0",
+  "dependencies": {
+    "@huggingface/transformers": "^3.7.0",
+    "better-sqlite3": "^11.10.0",
+    "electron-audio-loopback": "^1.0.6"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.example.meetingcopilot",
+    "productName": "Meeting Copilot",
+    "files": ["src/**/*", "package.json", "!node_modules/onnxruntime-node/**", "!node_modules/sharp/**", "!node_modules/@img/**"],
+    "asarUnpack": ["**/*.node"],
+    "win": { "target": ["nsis"] },
+    "mac": {
+      "target": ["dmg"],
+      "category": "public.app-category.productivity",
+      "hardenedRuntime": true,
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "Needed to transcribe your microphone.",
+        "NSAudioCaptureUsageDescription": "Needed to transcribe system audio.",
+        "LSUIElement": true
+      }
+    }
+  }
+}
